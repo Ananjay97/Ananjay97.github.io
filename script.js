@@ -69,7 +69,7 @@ function giftOpen() {
 //}
 
 function findPerson() {
-    var names = ["Aravind", "Jithin", "Suhail", "Vishnu", "Anirudh", "Akhil"];
+    var names = ["Aravind", "Jithin", "Ananjay", "Resmi", "Abeel", "Anusree"];
     var randomIndex = Math.floor(Math.random() * names.length);
     return names[randomIndex];
 }
