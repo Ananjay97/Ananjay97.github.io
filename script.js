@@ -40,7 +40,40 @@ function giftOpen() {
       findPerson();
     }
   });
+
+  // Fetch names and populate the dropdown
+  fetchNamesAndPopulateDropdown();
 }
+
+// Function to fetch names and populate the dropdown
+function fetchNamesAndPopulateDropdown() {
+  var spreadsheetId = '1baNXQaakIA8syWw5UdUMWpQZiAqtbmqwLLuPtZ4UzhY';
+  var range = 'Sheet2!A:A'; // Assuming names are in column A of Sheet1
+
+  gapi.client.sheets.spreadsheets.values.get({
+    spreadsheetId: spreadsheetId,
+    range: range,
+  }).then(function (response) {
+    var values = response.result.values;
+    if (values && values.length > 0) {
+      var selectOptions = $("#people");
+      values.forEach(function (name, index) {
+        // Assuming the first column (A) has names
+        selectOptions.append($('<option>', {
+          value: index,
+          text: name[0]
+        }));
+      });
+    } else {
+      console.error('No data found in the spreadsheet');
+    }
+  }, function (response) {
+    console.error('Error fetching data from Google Sheets', response);
+  });
+}
+  
+
+
 
 // Find Person
 function findPerson() {
