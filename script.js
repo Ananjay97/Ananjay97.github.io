@@ -1,88 +1,86 @@
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
+  initClient();
   giftOpen();
 });
 
-jQuery(window).load(function() {
-  window.requestAnimFrame = (function() {
+function initClient() {
+  gapi.load('client', function () {
+    gapi.client.init({
+      apiKey: '63a7554d70692b90d6379259fb20ee5a845f9c32', // Replace with your API key
+      discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+    }).then(function () {
+      // API client is initialized, you can now use findPerson function
+    });
+  });
+}
+
+jQuery(window).load(function () {
+  window.requestAnimFrame = (function () {
     return (
       window.requestAnimationFrame ||
       window.webkitRequestAnimationFrame ||
       window.mozRequestAnimationFrame ||
-      function(callback) {
+      function (callback) {
         window.setTimeout(callback, 1000 / 60);
       }
     );
   })();
 });
+
 //Gift Open
 
 // Updated giftOpen function
-
-
 function giftOpen() {
-  jQuery("section.gift").on("click", function() {
+  jQuery("section.gift").on("click", function () {
     if ($("#people").val() === "") {
       $(".dropdown-error").show();
       $(".dropdown-error").fadeOut(2000);
     } else {
       $(".header").hide();
-        /*let name = findPerson($("#people").val());*/
-        let name = findPerson();
-
-      name = $("#people option:selected").text()+" , you've got <span class='scramble'>"+ name +"</span>";
-      $(".person-text").html(name);
-      $(".scramble").scramble(5000,200);
-      createSnow();
-      setTimeout(function() {
-        jQuery(".santa-wrapper").fadeIn(5000);
-      }, 500);
-      jQuery(".gift-top").removeClass("hovered");
-      jQuery(".gift-text").hide();
-      jQuery(".gift-final-text").show();
-      jQuery("#snow").show();
-      jQuery(".gift-bottom").addClass("fadeout");
-      jQuery(".gift-top").addClass("fadeout");
-
+      findPerson();
     }
   });
 }
-//Find Person
 
-//function findPerson(id) {
-//  switch (id) {
-//    case "1":
-//      return "Aravind";
-//    case "2":
-//      return "Jithin";
-//    case "3":
-//      return "Suhail";
-//    case "4":
-//      return "Vishnu";
-//    case "5":
-//      return "Anirudh";
-//    case "6":
-//      return "Akhil";
-
-//    default:
-//      return "first name";
-//  }
-//}
-
+// Find Person
 function findPerson() {
-    var names = ["Aravind", "Jithin", "Ananjay", "Resmi", "Abeel", "Anusree"];
-    var randomIndex = Math.floor(Math.random() * names.length);
-    return names[randomIndex];
+  var spreadsheetId = '1baNXQaakIA8syWw5UdUMWpQZiAqtbmqwLLuPtZ4UzhY';
+  var range = 'Sheet1!A:A'; // Assuming names are in column A of Sheet1
+
+  gapi.client.sheets.spreadsheets.values.get({
+    spreadsheetId: spreadsheetId,
+    range: range,
+  }).then(function (response) {
+    var values = response.result.values;
+    if (values && values.length > 0) {
+      var randomIndex = Math.floor(Math.random() * values.length);
+      var randomName = values[randomIndex][0];
+      updateWithPerson(randomName);
+    } else {
+      console.error('No data found in the spreadsheet');
+    }
+  }, function (response) {
+    console.error('Error fetching data from Google Sheets', response);
+  });
 }
 
+function updateWithPerson(name) {
+  var message = $("#people option:selected").text() + " , you've got <span class='scramble'>" + name + "</span>";
+  $(".person-text").html(message);
+  $(".scramble").scramble(5000, 200);
+  createSnow();
+  setTimeout(function () {
+    jQuery(".santa-wrapper").fadeIn(5000);
+  }, 500);
+  jQuery(".gift-top").removeClass("hovered");
+  jQuery(".gift-text").hide();
+  jQuery(".gift-final-text").show();
+  jQuery("#snow").show();
+  jQuery(".gift-bottom").addClass("fadeout");
+  jQuery(".gift-top").addClass("fadeout");
+}
 
-
-
-
-
-
-
-//Snow Fall
-
+// Snow Fall
 function createSnow() {
   var particles = [];
   var particleSize = 3;
@@ -105,34 +103,21 @@ function createSnow() {
   // Push particle iteration
   for (var i = 0; i < maxParticles; i++) {
     particles.push({
-      // Particle x position
       x: Math.random() * windowWidth,
-
-      // Particle y position
       y: Math.random() * windowHeight,
-
-      // Particle radius
       r: Math.random(Math.min(particleSize)) * particleSize,
-
-      // Particle density
       d: Math.random() * maxParticles
     });
   }
 
-  // Render particles
   function render() {
     ctx.clearRect(0, 0, windowWidth, windowHeight);
     ctx.fillStyle = "rgba(255, 255, 255, " + particleOpacity + ")";
     ctx.beginPath();
 
     for (var i = 0; i < maxParticles; i++) {
-      // Iterate the particles.
       var p = particles[i];
-
-      // Move particles along x, y.
       ctx.moveTo(p.x, p.y);
-
-      // Draw particle.
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2, true);
     }
 
@@ -140,24 +125,16 @@ function createSnow() {
     update();
   }
 
-  // To create a more dynamic and organic flow, we need to apply an
-  // incremental 'angle' that will iterate through each particle flow.
   var angle = 0.005;
 
-  // Update particles
   function update() {
-    // Incremental angle.
     angle += 0.005;
 
     for (var i = 0; i < maxParticles; i++) {
       var p = particles[i];
-
-      // Offset the particles flow based on the angle.
       p.y += Math.cos(p.d) + p.r;
       p.x += (Math.sin(angle) * Math.PI) / 10;
 
-      // Re-iterate the particles to the top once the particle has
-      // reached the bottom of the window.
       if (p.y > windowHeight) {
         particles[i] = {
           x: Math.random() * windowWidth,
@@ -168,7 +145,7 @@ function createSnow() {
       }
     }
   }
-  // Call function.
+
   (function runtime() {
     requestAnimFrame(runtime);
     render();
