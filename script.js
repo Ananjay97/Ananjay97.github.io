@@ -4,18 +4,15 @@ jQuery(document).ready(function () {
 });
 
 function initClient() {
-    gapi.load('client', function () {
-        gapi.client.init({
-            apiKey: 'AIzaSyC_7gev9jinCu83AaKWBRw7kpz03UILBc0', // Replace with your API key
-            discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
-        }).then(function () {
-            console.log('API client initialized successfully');
-        }).catch(function (error) {
-            console.error('Error initializing API client:', error);
-        });
+  gapi.load('client', function () {
+    gapi.client.init({
+      apiKey: 'AIzaSyC_7gev9jinCu83AaKWBRw7kpz03UILBc0', // Replace with your API key
+      discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+    }).then(function () {
+      // API client is initialized, you can now use findPerson function
     });
+  });
 }
-
 
 jQuery(window).load(function () {
   window.requestAnimFrame = (function () {
@@ -44,51 +41,10 @@ function giftOpen() {
     }
   });
 }
-  // Fetch names and populate the dropdown
-  fetchNamesAndPopulateDropdown();
-
-// Function to fetch names and populate the dropdown
-function fetchNamesAndPopulateDropdown() {
-  var spreadsheetId = '1xno8nPAa6boLI1dUTc2L8dG-IZugxVoor-OTsFt1FgE';
-  var range = 'Sheet1!A:A';
-
-
-            // Check if gapi.client is initialized
-            if (gapi.client) {
-                // Load the Google Sheets API
-                gapi.client.load('sheets', 'v4').then(function () {
-                    // Make the API request
-                    gapi.client.sheets.spreadsheets.values.get({
-                        spreadsheetId: spreadsheetId,
-                        range: range,
-                    }).then(function (response) {
-                        var values = response.result.values;
-                        if (values && values.length > 0) {
-                            var selectOptions = $("#people");
-                            values.forEach(function (name, index) {
-                                selectOptions.append($('<option>', {
-                                    value: index,
-                                    text: name[0]
-                                }));
-                            });
-                        } else {
-                            console.error('No data found in the spreadsheet');
-                        }
-                    }, function (response) {
-                        console.error('Error fetching data from Google Sheets', response);
-                    });
-                });
-            } else {
-                console.error('gapi.client is not initialized');
-            }
-        }
-  
-
-
 
 // Find Person
 function findPerson() {
-  var spreadsheetId = '1baNXQaakIA8syWw5UdUMWpQZiAqtbmqwLLuPtZ4UzhY';
+  var spreadsheetId = '1xno8nPAa6boLI1dUTc2L8dG-IZugxVoor-OTsFt1FgE';
   var range = 'Sheet1!A:A'; // Assuming names are in column A of Sheet1
 
   gapi.client.sheets.spreadsheets.values.get({
