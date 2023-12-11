@@ -1,7 +1,6 @@
 jQuery(document).ready(function () {
   initClient();
   giftOpen();
-  fetchDropdownData();
 });
 
 function initClient() {
@@ -11,6 +10,7 @@ function initClient() {
       discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
     }).then(function () {
       // API client is initialized, you can now use findPerson function
+      fetchDropdownData();
     });
   });
 }
