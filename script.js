@@ -47,8 +47,8 @@ function giftOpen() {
 
 // Function to fetch names and populate the dropdown
 function fetchNamesAndPopulateDropdown() {
-  var spreadsheetId = '1baNXQaakIA8syWw5UdUMWpQZiAqtbmqwLLuPtZ4UzhY';
-  var range = 'Sheet2!A:A'; // Assuming names are in column A of Sheet1
+  var spreadsheetId = '1xno8nPAa6boLI1dUTc2L8dG-IZugxVoor-OTsFt1FgE';
+  var range = 'Sheet1!A:A'; // Assuming names are in column A of Sheet1
 
   gapi.client.sheets.spreadsheets.values.get({
     spreadsheetId: spreadsheetId,
