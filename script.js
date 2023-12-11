@@ -43,7 +43,6 @@ function giftOpen() {
 }
   // Fetch names and populate the dropdown
   fetchNamesAndPopulateDropdown();
-}
 
 // Function to fetch names and populate the dropdown
 function fetchNamesAndPopulateDropdown() {
