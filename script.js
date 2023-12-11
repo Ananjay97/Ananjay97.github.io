@@ -1,6 +1,7 @@
 jQuery(document).ready(function () {
   initClient();
   giftOpen();
+  fetchDropdownData();
 });
 
 function initClient() {
@@ -26,6 +27,38 @@ jQuery(window).load(function () {
     );
   })();
 });
+
+// Add this function to fetch data for the dropdown
+function fetchDropdownData() {
+  var spreadsheetId = '1xno8nPAa6boLI1dUTc2L8dG-IZugxVoor-OTsFt1FgE';
+  var range = 'Sheet2!A:A'; // Assuming names are in column A of Sheet1
+
+  gapi.client.sheets.spreadsheets.values.get({
+    spreadsheetId: spreadsheetId,
+    range: range,
+  }).then(function (response) {
+    var values = response.result.values;
+    if (values && values.length > 0) {
+      // Assuming the dropdown is identified by the ID 'people'
+      var dropdown = $("#people");
+
+      // Clear existing options
+      dropdown.empty();
+
+      // Add a default option
+      dropdown.append('<option value="">Who are you?</option>');
+
+      // Add fetched data to the dropdown
+      for (var i = 0; i < values.length; i++) {
+        dropdown.append('<option value="' + i + '">' + values[i][0] + '</option>');
+      }
+    } else {
+      console.error('No data found in the spreadsheet for dropdown');
+    }
+  }, function (response) {
+    console.error('Error fetching data for dropdown from Google Sheets', response);
+  });
+}
 
 //Gift Open
 
