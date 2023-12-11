@@ -4,15 +4,18 @@ jQuery(document).ready(function () {
 });
 
 function initClient() {
-  gapi.load('client', function () {
-    gapi.client.init({
-      apiKey: 'AIzaSyC_7gev9jinCu83AaKWBRw7kpz03UILBc0', // Replace with your API key
-      discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
-    }).then(function () {
-      // API client is initialized, you can now use findPerson function
+    gapi.load('client', function () {
+        gapi.client.init({
+            apiKey: 'AIzaSyC_7gev9jinCu83AaKWBRw7kpz03UILBc0', // Replace with your API key
+            discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+        }).then(function () {
+            console.log('API client initialized successfully');
+        }).catch(function (error) {
+            console.error('Error initializing API client:', error);
+        });
     });
-  });
 }
+
 
 jQuery(window).load(function () {
   window.requestAnimFrame = (function () {
