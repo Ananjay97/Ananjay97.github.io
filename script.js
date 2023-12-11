@@ -50,37 +50,36 @@ function fetchNamesAndPopulateDropdown() {
   var spreadsheetId = '1xno8nPAa6boLI1dUTc2L8dG-IZugxVoor-OTsFt1FgE';
   var range = 'Sheet1!A:A';
 
-  // Check if gapi.client is initialized
-  if (gapi.client) {
-    // Load the Google Sheets API
-    gapi.client.load('sheets', 'v4').then(function () {
-      // Make the API request
-      gapi.client.sheets.spreadsheets.values.get({
-        spreadsheetId: spreadsheetId,
-        range: range,
-      }).then(function (response) {
-        console.log('Response from Google Sheets:', response);
 
-        var values = response.result.values;
-        if (values && values.length > 0) {
-          var selectOptions = $("#people");
-          values.forEach(function (name, index) {
-            selectOptions.append($('<option>', {
-              value: index,
-              text: name[0]
-            }));
-          });
-        } else {
-          console.error('No data found in the spreadsheet');
+            // Check if gapi.client is initialized
+            if (gapi.client) {
+                // Load the Google Sheets API
+                gapi.client.load('sheets', 'v4').then(function () {
+                    // Make the API request
+                    gapi.client.sheets.spreadsheets.values.get({
+                        spreadsheetId: spreadsheetId,
+                        range: range,
+                    }).then(function (response) {
+                        var values = response.result.values;
+                        if (values && values.length > 0) {
+                            var selectOptions = $("#people");
+                            values.forEach(function (name, index) {
+                                selectOptions.append($('<option>', {
+                                    value: index,
+                                    text: name[0]
+                                }));
+                            });
+                        } else {
+                            console.error('No data found in the spreadsheet');
+                        }
+                    }, function (response) {
+                        console.error('Error fetching data from Google Sheets', response);
+                    });
+                });
+            } else {
+                console.error('gapi.client is not initialized');
+            }
         }
-      }, function (response) {
-        console.error('Error fetching data from Google Sheets', response);
-      });
-    });
-  } else {
-    console.error('gapi.client is not initialized');
-  }
-}
   
 
 
