@@ -40,7 +40,7 @@ function giftOpen() {
       findPerson();
     }
   });
-
+}
   // Fetch names and populate the dropdown
   fetchNamesAndPopulateDropdown();
 }
