@@ -6,7 +6,7 @@ jQuery(document).ready(function () {
 function initClient() {
   gapi.load('client', function () {
     gapi.client.init({
-      apiKey: '63a7554d70692b90d6379259fb20ee5a845f9c32', // Replace with your API key
+      apiKey: 'AIzaSyC_7gev9jinCu83AaKWBRw7kpz03UILBc0', // Replace with your API key
       discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
     }).then(function () {
       // API client is initialized, you can now use findPerson function
